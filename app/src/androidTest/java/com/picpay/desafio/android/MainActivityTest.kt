@@ -1,68 +1,85 @@
 package com.picpay.desafio.android
 
-import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
-import okhttp3.mockwebserver.Dispatcher
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.RecordedRequest
+import com.picpay.desafio.android.features.users.activity.MainActivity
+import com.picpay.desafio.android.features.users.viewmodel.UsersViewModel
+import com.picpay.desafio.base.PicPayAPITest
+import com.picpay.desafio.utilities.Mock
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.runBlocking
+import org.hamcrest.Matchers.not
 import org.junit.Test
+import org.koin.core.inject
 
 
-class MainActivityTest {
+class MainActivityTest: PicPayAPITest() {
 
-    private val server = MockWebServer()
+    private val viewModel: UsersViewModel by inject()
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Test
-    fun shouldDisplayTitle() {
+    fun shouldDisplayRecyclerViewItem() {
+        mockWebServer.dispatcher = getMockWebServerDispatcher(200)
+        runBlocking {
+            viewModel.loadUsers()
+            viewModel.state.take(3)
+        }
+
         launchActivity<MainActivity>().apply {
-            val expectedTitle = context.getString(R.string.title)
-
-            moveToState(Lifecycle.State.RESUMED)
-
-            onView(withText(expectedTitle)).check(matches(isDisplayed()))
+            RecyclerViewMatchers.checkRecyclerViewItem(R.id.recyclerView, 0, withText(Mock.Data.users.first().name))
+            RecyclerViewMatchers.checkRecyclerViewItem(R.id.recyclerView, 0, withText(Mock.Data.users.first().username))
         }
     }
 
     @Test
-    fun shouldDisplayListItem() {
-        server.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                return when (request.path) {
-                    "/users" -> successResponse
-                    else -> errorResponse
-                }
-            }
+    fun shouldDisplayRecyclerView() {
+        mockWebServer.dispatcher = getMockWebServerDispatcher(200)
+        runBlocking {
+            viewModel.loadUsers()
+            viewModel.state.take(3)
         }
-
-        server.start(serverPort)
 
         launchActivity<MainActivity>().apply {
-            // TODO("validate if list displays items returned by server")
+            onView(ViewMatchers.withId(R.id.recyclerView)).check(matches(isDisplayed()))
+            RecyclerViewMatchers.checkRecyclerViewItem(R.id.recyclerView, 0, withText(Mock.Data.users.first().name))
+            RecyclerViewMatchers.checkRecyclerViewItem(R.id.recyclerView, 0, withText(Mock.Data.users.first().username))
         }
-
-        server.close()
     }
 
-    companion object {
-        private const val serverPort = 8080
-
-        private val successResponse by lazy {
-            val body =
-                "[{\"id\":1001,\"name\":\"Eduardo Santos\",\"img\":\"https://randomuser.me/api/portraits/men/9.jpg\",\"username\":\"@eduardo.santos\"}]"
-
-            MockResponse()
-                .setResponseCode(200)
-                .setBody(body)
+    @Test
+    fun shouldDisplayErrorView() {
+        mockWebServer.dispatcher = getMockWebServerDispatcher(400)
+        runBlocking {
+            viewModel.loadUsers()
+            viewModel.state.take(3)
         }
 
-        private val errorResponse by lazy { MockResponse().setResponseCode(404) }
+        launchActivity<MainActivity>().apply {
+            onView(ViewMatchers.withId(R.id.recyclerView)).check(matches(not(isDisplayed())))
+            onView(ViewMatchers.withId(R.id.user_list_progress_bar)).check(matches(not(isDisplayed())))
+            onView(ViewMatchers.withId(R.id.error_view)).check(matches(isDisplayed()))
+        }
     }
+
+    @Test
+    fun shouldDisplayLoadingView() {
+        runBlocking {
+            viewModel.loadUsers()
+            viewModel.state.take(2)
+        }
+
+        launchActivity<MainActivity>().apply {
+            onView(ViewMatchers.withId(R.id.user_list_progress_bar)).check(matches(isDisplayed()))
+            onView(ViewMatchers.withId(R.id.recyclerView)).check(matches(not(isDisplayed())))
+            onView(ViewMatchers.withId(R.id.error_view)).check(matches(not(isDisplayed())))
+        }
+    }
+
 }
