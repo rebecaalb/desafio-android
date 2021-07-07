@@ -1,4 +1,4 @@
-package com.picpay.desafio.base.base
+package com.picpay.desafio.base
 
 import com.picpay.desafio.di.TestModule
 import com.picpay.desafio.android.di.DataModule
