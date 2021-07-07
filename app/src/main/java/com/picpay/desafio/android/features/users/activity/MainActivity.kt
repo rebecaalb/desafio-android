@@ -9,7 +9,7 @@ import com.picpay.desafio.android.core.view.activity.BaseActivity
 import com.picpay.desafio.android.core.view.binding.withBinding
 import com.picpay.desafio.android.databinding.ActivityMainBinding
 import com.picpay.desafio.android.features.users.adapter.UsersAdapter
-import com.picpay.desafio.android.feature.users.model.UserUI
+import com.picpay.desafio.android.features.users.model.UserUI
 import com.picpay.desafio.android.features.users.viewmodel.UsersState
 import com.picpay.desafio.android.features.users.viewmodel.UsersViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel

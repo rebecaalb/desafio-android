@@ -1,4 +1,4 @@
-package com.picpay.desafio.android.feature.users.model
+package com.picpay.desafio.android.features.users.model
 
 data class UserUI(
     val img: String,

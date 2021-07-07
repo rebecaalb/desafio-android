@@ -1,6 +1,6 @@
 package com.picpay.desafio.android.features.users.viewmodel
 
-import com.picpay.desafio.android.feature.users.model.UserUI
+import com.picpay.desafio.android.features.users.model.UserUI
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class UsersStateImpl : UsersState {

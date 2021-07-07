@@ -3,9 +3,8 @@ package com.picpay.desafio.android.features.users.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.picpay.desafio.android.feature.users.adapter.UserListDiffCallback
-import com.picpay.desafio.android.feature.users.holder.UserViewHolder
-import com.picpay.desafio.android.feature.users.model.UserUI
+import com.picpay.desafio.android.features.users.holder.UserViewHolder
+import com.picpay.desafio.android.features.users.model.UserUI
 
 class UsersAdapter : RecyclerView.Adapter<UserViewHolder>() {
 

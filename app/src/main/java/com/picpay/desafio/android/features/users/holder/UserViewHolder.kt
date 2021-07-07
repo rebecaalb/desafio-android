@@ -1,4 +1,4 @@
-package com.picpay.desafio.android.feature.users.holder
+package com.picpay.desafio.android.features.users.holder
 
 import android.view.View
 import android.view.ViewGroup
@@ -6,7 +6,7 @@ import com.picpay.desafio.android.R
 import com.picpay.desafio.android.core.extension.layoutInflater
 import com.picpay.desafio.android.core.view.holder.BaseViewHolder
 import com.picpay.desafio.android.databinding.ListItemUserBinding
-import com.picpay.desafio.android.feature.users.model.UserUI
+import com.picpay.desafio.android.features.users.model.UserUI
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 
