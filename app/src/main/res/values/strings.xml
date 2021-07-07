@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">PicPay</string>
-    <string name="title">Contatos</string>
+    <string name="contacts_label">Contatos</string>
     <string name="error">Ocorreu um erro. Tente novamente.</string>
-
+    <string name="retry_button_label">Tentar novamente</string>
 </resources>
