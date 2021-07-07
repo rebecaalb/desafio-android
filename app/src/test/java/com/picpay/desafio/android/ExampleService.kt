@@ -1,7 +1,9 @@
 package com.picpay.desafio.android
 
+import com.picpay.desafio.android.data.PicPayAPI
+
 class ExampleService(
-    private val service: PicPayService
+    private val service: PicPayAPI
 ) {
 
     fun example(): List<User> {
